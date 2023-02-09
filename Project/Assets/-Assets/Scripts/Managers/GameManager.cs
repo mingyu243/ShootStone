@@ -5,6 +5,7 @@ using UnityEngine;
 
 public enum GameState
 {
+    None,
     Ready,
     Play,
     Result
@@ -12,7 +13,7 @@ public enum GameState
 
 public class GameManager
 {
-    GameState _gameState;
+    GameState _gameState = GameState.None;
     public GameState GameState 
     { 
         get => _gameState;

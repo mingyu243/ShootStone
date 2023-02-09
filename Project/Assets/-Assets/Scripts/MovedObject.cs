@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class MovedObject : MonoBehaviour
+public class MovedObject : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    Rigidbody _rb;
+    [SerializeField] Rigidbody _rb;
     [SerializeField] bool _isDie;
 
     public Rigidbody Rb => _rb;
@@ -15,27 +16,48 @@ public class MovedObject : MonoBehaviour
         set
         {
             _isDie = value;
-            if (_isDie) 
+            if (_isDie)
             {
                 OnDied?.Invoke();
             }
         }
     }
+    public bool IsMoving => (_rb.velocity.sqrMagnitude > 0);
 
+    public event Action OnPointerDownAction;
+    public event Action OnPointerUpAction;
     public event Action OnDied;
-
-    private void Awake()
-    {
-        _rb = GetComponent<Rigidbody>();
-    }
 
     public void Init()
     {
         IsDie = false;
     }
 
-    public void Shoot(float power)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        _rb.velocity = Vector3.forward * power;
+        OnPointerDownAction?.Invoke();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        OnPointerUpAction?.Invoke();
+    }
+
+    public void Shoot(Vector3 power)
+    {
+        _rb.velocity = power;
+    }
+
+    private void Update()
+    {
+        if(IsDie)
+        {
+            return;
+        }
+
+        if(this.transform.position.y < -1f)
+        {
+            IsDie = true;
+        }
     }
 }
