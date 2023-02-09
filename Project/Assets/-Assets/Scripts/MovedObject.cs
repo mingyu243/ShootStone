@@ -50,7 +50,12 @@ public class MovedObject : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void Update()
     {
-        if(IsDie)
+        if (this.transform.position.y < -100f)
+        {
+            _rb.isKinematic = true;
+        }
+
+        if (IsDie)
         {
             return;
         }

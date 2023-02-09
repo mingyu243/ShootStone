@@ -14,10 +14,16 @@ public class GameHighScoreMode : MonoBehaviour
     [SerializeField] MovedObject _movedObject;
     [SerializeField] Aiming _aiming;
 
-    [Header("값")]
-    [SerializeField] float _shotPower;
+    [Header("점수")]
     [SerializeField] int _score;
     [SerializeField] int _distance;
+
+    [Header("값")]
+    [SerializeField] float _shotPower;
+
+    [Header("난이도")]
+    [SerializeField] AnimationCurve _levelCurve;
+    [SerializeField] int _limitLevelDistance;
 
     Coroutine _playCoroutine;
     HashSet<FloorCube> _triggeredFloorCubes = new HashSet<FloorCube>();
@@ -49,28 +55,23 @@ public class GameHighScoreMode : MonoBehaviour
         }
 
         bool isSuccess = _triggeredFloorCubes.Add(floorCube);
-        if(!isSuccess)
+        if(isSuccess)
         {
-            return;
+            print("Enter " + floorCube.gameObject.name);
         }
 
-        print("Enter " + floorCube.gameObject.name);
-
-        switch (floorCube.Type)
+        if(!Aiming.CanAiming)
         {
-            case FloorCubeType.None:
-                break;
-            case FloorCubeType.Normal:
-                AddScore(1);
-                break;
-            case FloorCubeType.Correct:
-                AddScore(1);
-                break;
-            case FloorCubeType.Wrong:
-                AddScore(1);
-                break;
+            // 최대 거리를 거리 점수로.
+            int curDist = Mathf.RoundToInt(floorCube.transform.position.z);
+            if (_distance < curDist)
+            {
+                _distance = curDist;
+                UpdateDistance(_distance);
+            }
         }
     }
+
     private void OnTriggerExitAction(FloorCube floorCube)
     {
         if (!_movedObject.IsMoving || _movedObject.IsDie)
@@ -78,8 +79,11 @@ public class GameHighScoreMode : MonoBehaviour
             return;
         }
 
-        print("Exit " + floorCube.gameObject.name);
-        _triggeredFloorCubes.Remove(floorCube);
+        bool isSuccess = _triggeredFloorCubes.Remove(floorCube);
+        if (isSuccess)
+        {
+            print("Exit " + floorCube.gameObject.name + " / " + floorCube.transform.position.z);
+        }
     }
 
     private void CheckJudge()
@@ -116,13 +120,13 @@ public class GameHighScoreMode : MonoBehaviour
     void UpdateScore(int score)
     {
         _score = score;
-        _ui.SetScore(score);
+        _ui.SetScore(_score);
     }
 
     void UpdateDistance(int dist)
     {
-        _score = dist;
-        _ui.SetDistance(dist);
+        _distance = dist;
+        _ui.SetDistance(_distance);
     }
 
     void OnGameStateChanged(GameState gameState)
@@ -146,10 +150,12 @@ public class GameHighScoreMode : MonoBehaviour
     {
         // 발판 원래대로.
         _floorGenerator.Init();
+        _floorGenerator.SetLevel(_levelCurve.Evaluate(0));
         _floorGenerator.Show();
 
         // 점수 초기화.
         UpdateScore(0);
+        UpdateDistance(0);
 
         // 스톤 초기화.
         _movedObject.Init();
@@ -190,6 +196,9 @@ public class GameHighScoreMode : MonoBehaviour
                 {
                     break;
                 }
+
+                // 난이도 조절.
+                _floorGenerator.SetLevel(_levelCurve.Evaluate((float)_distance / (float)_limitLevelDistance));
 
                 // 재배치.
                 int newZ = Mathf.FloorToInt(_movedObject.transform.position.z - oldZ) - 1;

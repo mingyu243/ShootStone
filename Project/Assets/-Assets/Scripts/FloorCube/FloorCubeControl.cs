@@ -64,6 +64,7 @@ public class FloorCubeControl : MonoBehaviour
         _curFloorCube?.Init();
         StartCoroutine(DelayShow(delayTime));
     }
+
     IEnumerator DelayShow(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);

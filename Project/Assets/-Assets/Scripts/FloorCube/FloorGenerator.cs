@@ -14,6 +14,9 @@ public class FloorGenerator : MonoBehaviour
     float _startX = -1.5f;
     float _gapX = 1.0f;
 
+    [Header("스폰 확률")]
+    [SerializeField] int _level;
+
     Queue<FloorCubeControl> _floorCubeControlQueue = new Queue<FloorCubeControl>();
 
     public event Action<FloorCube> OnTriggerEnterAction;
@@ -58,7 +61,12 @@ public class FloorGenerator : MonoBehaviour
             go.transform.position = new Vector3(_startX + (_gapX * i % 4), 0.0f, (i / 4) + 1);
         }
         _smoothPlane.transform.localScale = new Vector3(1, 1, _viewRowCount + 1);
-        _smoothPlane.transform.position = new Vector3(0, 0, (_viewRowCount / 2.0f) - 0.5f + 0.5f);
+        _smoothPlane.transform.position = new Vector3(0, 0, _viewRowCount / 2.0f);
+    }
+
+    public void SetLevel(float levelRatio)
+    {
+        _level = Mathf.RoundToInt(levelRatio * 100);
     }
 
     public void Show(int startIndex = 0)
@@ -71,23 +79,17 @@ public class FloorGenerator : MonoBehaviour
             controls[i].gameObject.SetActive(true);
 
             int random = UnityEngine.Random.Range(0, 100);
-            FloorCubeType type = FloorCubeType.None;
-            if (random >= 10)
+            FloorCubeType type;
+            if (random >= _level)
             {
-                type = FloorCubeType.Wrong;
-            }
-            else if (random >= 2)
-            {
-                //type = FloorCubeType.Normal;
                 type = FloorCubeType.Correct;
             }
             else
             {
-                type = FloorCubeType.Correct;
+                type = FloorCubeType.Wrong;
             }
 
             float delay = ((i - startIndex) / 4) * 0.07f;
-
             controls[i].Show(type, delay);
         }
     }
