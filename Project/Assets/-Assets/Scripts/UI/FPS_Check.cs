@@ -13,6 +13,10 @@ public class FPS_Check : MonoBehaviour
 
     private void Start()
     {
+#if UNITY_ANDROID
+        Application.targetFrameRate = 60;
+#endif
+
         fFont_Size = fFont_Size == 0 ? 50 : fFont_Size;
     }
 
