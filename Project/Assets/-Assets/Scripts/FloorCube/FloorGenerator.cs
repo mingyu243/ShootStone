@@ -82,11 +82,18 @@ public class FloorGenerator : MonoBehaviour
             FloorCubeType type;
             if (random >= _level)
             {
-                type = FloorCubeType.Correct;
+                type = FloorCubeType.Normal;
             }
             else
             {
-                type = FloorCubeType.Wrong;
+                if(UnityEngine.Random.Range(0, 10) >= 9)
+                {
+                    type = FloorCubeType.Correct;
+                }
+                else
+                {
+                    type = FloorCubeType.Wrong;
+                }
             }
 
             float delay = ((i - startIndex) / 4) * 0.07f;

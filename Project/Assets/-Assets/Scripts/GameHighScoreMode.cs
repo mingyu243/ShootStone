@@ -29,6 +29,7 @@ public class GameHighScoreMode : MonoBehaviour
     HashSet<FloorCube> _triggeredFloorCubes = new HashSet<FloorCube>();
 
     public Aiming Aiming => _aiming;
+    public int FinalScore => _score + _distance;
 
     private void Awake()
     {
@@ -55,12 +56,12 @@ public class GameHighScoreMode : MonoBehaviour
         }
 
         bool isSuccess = _triggeredFloorCubes.Add(floorCube);
-        if(isSuccess)
+        if (isSuccess)
         {
             print("Enter " + floorCube.gameObject.name);
         }
 
-        if(!Aiming.CanAiming)
+        if (!Aiming.CanAiming)
         {
             // 최대 거리를 거리 점수로.
             int curDist = Mathf.RoundToInt(floorCube.transform.position.z);
@@ -90,8 +91,17 @@ public class GameHighScoreMode : MonoBehaviour
     {
         bool isDie = true;
 
+        float minDist = 999;
+        FloorCube closestFloorCube = null;
         foreach (var floorCube in _triggeredFloorCubes)
         {
+            float dist = Vector3.Distance(floorCube.transform.position, _movedObject.transform.position);
+            if (floorCube.Type == FloorCubeType.Normal && minDist > dist)
+            {
+                minDist = dist;
+                closestFloorCube = floorCube;
+            }
+
             switch (floorCube.Type)
             {
                 case FloorCubeType.None:
@@ -107,7 +117,7 @@ public class GameHighScoreMode : MonoBehaviour
                     break;
             }
         }
-
+        closestFloorCube?.ReactEffect();
         _movedObject.IsDie = isDie;
     }
 

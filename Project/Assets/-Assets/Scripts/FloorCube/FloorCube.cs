@@ -37,22 +37,26 @@ public class FloorCube : MonoBehaviour
     public void Init()
     {
         _isTouching = false;
-        Material.SetColor("_BaseColor", _normalColor);
+        //Material.SetColor("_BaseColor", _normalColor);
     }
 
     public virtual void TriggerEnter()
     {
         _isTouching = true;
-        Material.SetColor("_BaseColor", _triggerColor);
+        //Material.SetColor("_BaseColor", _triggerColor);
 
         floorGenerator.TriggerEnter(this);
     }
     public virtual void TriggerExit()
     {
         _isTouching = false;
-        Material.SetColor("_BaseColor", _normalColor);
+        //Material.SetColor("_BaseColor", _normalColor);
 
         floorGenerator.TriggerExit(this);
+    }
+
+    public virtual void ReactEffect()
+    {
     }
 
     public bool IsTouching => _isTouching;
