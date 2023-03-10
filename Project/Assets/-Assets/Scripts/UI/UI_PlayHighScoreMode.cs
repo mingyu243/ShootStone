@@ -14,19 +14,35 @@ public class UI_PlayHighScoreMode : MonoBehaviour
     [SerializeField] Animator _scoreAnimator;
     [SerializeField] TextMeshProUGUI _scoreText;
 
-    [Header("Distance")]
-    [SerializeField] Animator _distAnimator;
-    [SerializeField] TextMeshProUGUI _distText;
+    [Header("Sub Score")]
+    [SerializeField] Animator _subScoreAnimator;
+    [SerializeField] TextMeshProUGUI _subScoreText;
 
-    public void SetScore(int score)
+    int _score;
+
+    public void Init()
     {
-        _scoreAnimator.SetTrigger("Focus");
-        _scoreText.text = score.ToString();
+        _score = 0;
+        _scoreText.text = string.Empty;
     }
 
-    public void SetDistance(int dist)
+    public void AddScore(int score)
     {
-        _distAnimator.SetTrigger("Focus");
-        _distText.text = dist.ToString();
+        _score += score;
+        _scoreText.text = _score.ToString();
+    }
+
+    public void AddSubScore(int subScore)
+    {
+        _subScoreText.text = $"+{subScore}";
+        _subScoreAnimator.SetTrigger("SHOW");
+
+        StartCoroutine(Do());
+
+        IEnumerator Do()
+        {
+            yield return new WaitForSeconds(0.8f);
+            AddScore(subScore);
+        }
     }
 }

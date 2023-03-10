@@ -11,6 +11,11 @@ public enum GameState
     Result
 }
 
+public class PlayerState
+{
+    public int Score;
+}
+
 public class GameManager
 {
     GameState _gameState = GameState.None;
@@ -26,6 +31,13 @@ public class GameManager
             _gameState = value;
             OnGameStateChanged?.Invoke(_gameState);
         }
+    }
+
+    PlayerState _playerState = new PlayerState();
+    public PlayerState PlayerState
+    {
+        get => _playerState;
+        set => _playerState = value;
     }
 
     public event Action<GameState> OnGameStateChanged;

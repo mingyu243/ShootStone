@@ -29,7 +29,6 @@ public class GameHighScoreMode : MonoBehaviour
     HashSet<FloorCube> _triggeredFloorCubes = new HashSet<FloorCube>();
 
     public Aiming Aiming => _aiming;
-    public int FinalScore => _score + _distance;
 
     private void Awake()
     {
@@ -67,8 +66,7 @@ public class GameHighScoreMode : MonoBehaviour
             int curDist = Mathf.RoundToInt(floorCube.transform.position.z);
             if (_distance < curDist)
             {
-                _distance = curDist;
-                UpdateDistance(_distance);
+                UpdateDistance(curDist);
             }
         }
     }
@@ -90,18 +88,10 @@ public class GameHighScoreMode : MonoBehaviour
     private void CheckJudge()
     {
         bool isDie = true;
+        int finalScore = 0;
 
-        float minDist = 999;
-        FloorCube closestFloorCube = null;
         foreach (var floorCube in _triggeredFloorCubes)
         {
-            float dist = Vector3.Distance(floorCube.transform.position, _movedObject.transform.position);
-            if (floorCube.Type == FloorCubeType.Normal && minDist > dist)
-            {
-                minDist = dist;
-                closestFloorCube = floorCube;
-            }
-
             switch (floorCube.Type)
             {
                 case FloorCubeType.None:
@@ -111,32 +101,46 @@ public class GameHighScoreMode : MonoBehaviour
                     break;
                 case FloorCubeType.Correct:
                     isDie = false;
-                    AddScore(5);
+                    floorCube.ReactEffect();
+                    finalScore += 2;
                     break;
                 case FloorCubeType.Wrong:
                     break;
             }
         }
-        closestFloorCube?.ReactEffect();
-        _movedObject.IsDie = isDie;
+
+        if(isDie)
+        {
+            _movedObject.IsDie = isDie;
+        }
+        else
+        {
+            if(finalScore > 0)
+            {
+                AddScore(finalScore);
+            }
+        }
     }
 
     void AddScore(int addScore)
     {
-        _score += addScore;
-        UpdateScore(_score);
+        UpdateScore(_score + addScore);
     }
 
-    void UpdateScore(int score)
+    void UpdateScore(int newScore)
     {
-        _score = score;
-        _ui.SetScore(_score);
+        _ui.AddSubScore(newScore - _score);
+        _score = newScore;
+
+        Managers.Game.PlayerState.Score = _score + _distance;
     }
 
-    void UpdateDistance(int dist)
+    void UpdateDistance(int newDist)
     {
-        _distance = dist;
-        _ui.SetDistance(_distance);
+        _ui.AddScore(newDist - _distance);
+        _distance = newDist;
+
+        Managers.Game.PlayerState.Score = _score + _distance;
     }
 
     void OnGameStateChanged(GameState gameState)
@@ -164,8 +168,9 @@ public class GameHighScoreMode : MonoBehaviour
         _floorGenerator.Show();
 
         // 점수 초기화.
-        UpdateScore(0);
-        UpdateDistance(0);
+        _ui.Init();
+        _score = 0;
+        _distance = 0;
 
         // 스톤 초기화.
         _movedObject.Init();
@@ -226,6 +231,14 @@ public class GameHighScoreMode : MonoBehaviour
             _playCoroutine = null;
         }
 
+        if(PlayerPrefs.HasKey("BEST_SCORE"))
+        {
+
+        }
+        else
+        {
+            PlayerPrefs.SetInt();
+        }
         Managers.Game.GameState = GameState.Result;
     }
 }
