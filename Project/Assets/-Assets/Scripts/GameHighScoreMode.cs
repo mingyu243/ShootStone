@@ -237,7 +237,7 @@ public class GameHighScoreMode : MonoBehaviour
         }
         else
         {
-            PlayerPrefs.SetInt();
+            //PlayerPrefs.SetInt();
         }
         Managers.Game.GameState = GameState.Result;
     }
