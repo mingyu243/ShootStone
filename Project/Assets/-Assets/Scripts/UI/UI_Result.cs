@@ -18,6 +18,7 @@ public class UI_Result : MonoBehaviour
     private void OnEnable()
     {
         _scoreText.text = Managers.Game.PlayerState.Score.ToString();
+        _bestText.text = Managers.Game.PlayerState.BestScore.ToString();
 
         _animator.SetTrigger("SHOW");
     }

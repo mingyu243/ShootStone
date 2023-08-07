@@ -14,6 +14,25 @@ public enum GameState
 public class PlayerState
 {
     public int Score;
+    public int BestScore
+    {
+        get
+        {
+            if (PlayerPrefs.HasKey("BEST_SCORE") == false)
+            {
+                PlayerPrefs.SetInt("BEST_SCORE", 0);
+            }
+
+            return PlayerPrefs.GetInt("BEST_SCORE");
+        }
+        set
+        {
+            if (BestScore < value)
+            {
+                PlayerPrefs.SetInt("BEST_SCORE", value);
+            }
+        }
+    }
 }
 
 public class GameManager

@@ -231,14 +231,11 @@ public class GameHighScoreMode : MonoBehaviour
             _playCoroutine = null;
         }
 
-        if(PlayerPrefs.HasKey("BEST_SCORE"))
+        if (Managers.Game.PlayerState.BestScore < Managers.Game.PlayerState.Score)
         {
+            Managers.Game.PlayerState.BestScore = Managers.Game.PlayerState.Score;
+        }
 
-        }
-        else
-        {
-            //PlayerPrefs.SetInt();
-        }
         Managers.Game.GameState = GameState.Result;
     }
 }
