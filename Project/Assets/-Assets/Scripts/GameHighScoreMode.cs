@@ -132,7 +132,8 @@ public class GameHighScoreMode : MonoBehaviour
         _ui.AddSubScore(newScore - _score);
         _score = newScore;
 
-        Managers.Game.PlayerState.Score = _score + _distance;
+        _score += _distance;
+        Managers.Game.PlayerState.Score = _score;
     }
 
     void UpdateDistance(int newDist)
@@ -140,7 +141,8 @@ public class GameHighScoreMode : MonoBehaviour
         _ui.AddScore(newDist - _distance);
         _distance = newDist;
 
-        Managers.Game.PlayerState.Score = _score + _distance;
+        _score += _distance;
+        Managers.Game.PlayerState.Score = _score;
     }
 
     void OnGameStateChanged(GameState gameState)
@@ -231,14 +233,6 @@ public class GameHighScoreMode : MonoBehaviour
             _playCoroutine = null;
         }
 
-        if(PlayerPrefs.HasKey("BEST_SCORE"))
-        {
-
-        }
-        else
-        {
-            //PlayerPrefs.SetInt();
-        }
         Managers.Game.GameState = GameState.Result;
     }
 }

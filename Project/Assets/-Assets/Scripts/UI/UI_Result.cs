@@ -8,7 +8,7 @@ public class UI_Result : MonoBehaviour
     Animator _animator;
 
     [SerializeField] TextMeshProUGUI _scoreText;
-    [SerializeField] TextMeshProUGUI _bestText;
+    [SerializeField] TextMeshProUGUI _bestScoreText;
 
     private void Awake()
     {
@@ -18,6 +18,7 @@ public class UI_Result : MonoBehaviour
     private void OnEnable()
     {
         _scoreText.text = Managers.Game.PlayerState.Score.ToString();
+        _bestScoreText.text = Managers.Game.PlayerState.BestScore.ToString();
 
         _animator.SetTrigger("SHOW");
     }

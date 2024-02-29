@@ -13,14 +13,39 @@ public enum GameState
 
 public class PlayerState
 {
-    public int Score;
+    int _score;
+
+    public int Score
+    {
+        get => _score;
+        set
+        {
+            _score = value;
+            
+            if(BestScore < _score)
+            {
+                BestScore = _score;
+            }
+        }
+    }
+    public int BestScore
+    {
+        get
+        {
+            return PlayerPrefs.GetInt("BEST_SCORE");
+        }
+        set
+        {
+            PlayerPrefs.SetInt("BEST_SCORE", value);
+        }
+    }
 }
 
 public class GameManager
 {
     GameState _gameState = GameState.None;
-    public GameState GameState 
-    { 
+    public GameState GameState
+    {
         get => _gameState;
         set
         {

@@ -12856,7 +12856,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _limitLevelDistance: 200
+  _limitLevelDistance: 350
 --- !u!1 &1216168830
 GameObject:
   m_ObjectHideFlags: 0
@@ -13731,7 +13731,7 @@ GameObject:
   - component: {fileID: 1768298895}
   - component: {fileID: 1768298896}
   m_Layer: 5
-  m_Name: Best
+  m_Name: BestScore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14033,7 +14033,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scoreText: {fileID: 41743653}
-  _bestText: {fileID: 975425336}
+  _bestScoreText: {fileID: 975425336}
 --- !u!95 &1945872873
 Animator:
   serializedVersion: 5
