@@ -132,8 +132,7 @@ public class GameHighScoreMode : MonoBehaviour
         _ui.AddSubScore(newScore - _score);
         _score = newScore;
 
-        _score += _distance;
-        Managers.Game.PlayerState.Score = _score;
+        Managers.Game.PlayerState.Score = _score + _distance;
     }
 
     void UpdateDistance(int newDist)
