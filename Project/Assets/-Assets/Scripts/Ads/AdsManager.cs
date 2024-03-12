@@ -19,7 +19,7 @@ public class AdsManager : MonoBehaviour
         _admobBanner.Init();
         _admobBanner.LoadAd();
 
-        _admobBanner.Show();
+        _admobBanner.Hide();
     }
 
     public void Show()

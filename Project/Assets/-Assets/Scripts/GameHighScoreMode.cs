@@ -98,6 +98,7 @@ public class GameHighScoreMode : MonoBehaviour
                     break;
                 case FloorCubeType.Normal:
                     isDie = false;
+                    floorCube.ReactEffect();
                     break;
                 case FloorCubeType.Correct:
                     isDie = false;
@@ -140,8 +141,7 @@ public class GameHighScoreMode : MonoBehaviour
         _ui.AddScore(newDist - _distance);
         _distance = newDist;
 
-        _score += _distance;
-        Managers.Game.PlayerState.Score = _score;
+        Managers.Game.PlayerState.Score = _score + _distance;
     }
 
     void OnGameStateChanged(GameState gameState)
@@ -152,6 +152,7 @@ public class GameHighScoreMode : MonoBehaviour
                 Ready();
                 break;
             case GameState.Play:
+                AdsManager.Instance.Show();
                 Play();
                 break;
             case GameState.Result:

@@ -37,7 +37,16 @@ public class IntroLogo : MonoBehaviour
                 yield return new WaitForSeconds(0.2f);
             }
 
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(2);
+
+            CanvasGroup cg = GetComponent<CanvasGroup>();
+
+            for (float i = 0; i < 0.7f; i += Time.deltaTime)
+            {
+                cg.alpha = 1 - (i / 0.7f);
+                yield return null;
+            }
+            Destroy(this.gameObject);
         }
     }
 
